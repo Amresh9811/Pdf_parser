@@ -1,295 +1,336 @@
 """
-Extractor for Construction Planning and Costing Documents.
+Costing extractor for construction documents.
+Extracts cost items, quantities, and unit prices.
 """
 
 import re
-import json
-from typing import Dict, List, Any, Optional
+from typing import List, Dict, Any, Optional
 from decimal import Decimal
 from loguru import logger
-import pandas as pd
 
-from .base_extractor import BaseExtractor, ExtractionError
+from pipeline.extractors.base_extractor import BaseExtractor
 
 
 class CostingExtractor(BaseExtractor):
     """
-    Extracts cost breakdown data from construction planning documents.
-    Handles mixed content: tables, calculations, and narrative text.
+    Extractor for construction costing documents.
+    Focuses on Civil Works Cost Summary tables with unit prices.
     """
     
-    def extract_structured_data(self) -> Dict[str, Any]:
-        """
-        Extract cost items with quantities, prices, and totals.
-        Returns: Dict with 'cost_items' list.
-        """
-        logger.info(f"Starting cost extraction for {self.file_name}")
-        
-        # Try table extraction first
-        cost_items = self._extract_from_tables()
-        logger.info(f"Extracted {len(cost_items)} items from tables")
-        
-        # If few items, use LLM to supplement
-        if len(cost_items) < 10:
-            logger.info("Supplementing with LLM extraction")
-            try:
-                llm_items = self._extract_with_llm()
-                logger.info(f"Extracted {len(llm_items)} items from LLM")
-                cost_items.extend(llm_items)
-            except Exception as e:
-                logger.warning(f"LLM extraction failed: {e}")
-        
-        # Deduplicate based on item_name
-        cost_items = self._deduplicate_items(cost_items)
-        
-        logger.info(f"Final extraction: {len(cost_items)} cost items")
-        
-        # IMPORTANT: Return empty list instead of raising error
-        if not cost_items:
-            logger.warning("No cost items extracted - returning empty dataset")
-            # Create a placeholder item so the pipeline doesn't fail
-            cost_items = [{
-                "item_name": "No cost data extracted",
-                "quantity": 0.0,
-                "unit": "N/A",
-                "unit_price_yen": 0.0,
-                "total_cost_yen": 0.0,
-                "cost_type": "other"
-            }]
-        
-        return {"cost_items": cost_items}
+    def __init__(self, file_path: str):
+        super().__init__(file_path)
+        self.document_type = "costing"
     
-    def _extract_from_tables(self) -> List[Dict[str, Any]]:
-        """Extract cost items from tables."""
-        tables = self.extract_tables_pdfplumber()
-        if not tables:
-            logger.warning("No tables found in document")
-            return []
+    def extract_structured_data(self) -> List[Dict[str, Any]]:
+        """
+        Extract cost items from Civil Works Cost Summary tables.
         
-        logger.info(f"Found {len(tables)} tables to process")
+        Returns:
+            List of cost item dictionaries
+        """
+        logger.info(f"Extracting costing data from {self.file_path}")
+        
         cost_items = []
         
-        for table_idx, table in enumerate(tables):
-            try:
-                if not table or len(table) < 2:
-                    continue
-                
-                logger.debug(f"Processing table {table_idx + 1}")
-                
-                # Convert to DataFrame
-                df = pd.DataFrame(table[1:], columns=table[0])
-                
-                # Clean column names
-                df.columns = [str(col).strip().lower() if col else f'col_{i}' 
-                             for i, col in enumerate(df.columns)]
-                
-                logger.debug(f"Table columns: {list(df.columns)}")
-                
-                # Identify columns (flexible matching)
-                item_col = self._find_column(df, ['item', 'description', 'work', 'activity', 'name'])
-                qty_col = self._find_column(df, ['quantity', 'qty', 'amount', 'volume'])
-                unit_col = self._find_column(df, ['unit', 'uom', 'u/m', 'units'])
-                unit_price_col = self._find_column(df, ['unit price', 'rate', 'unit cost', 'price', 'unit_price'])
-                total_col = self._find_column(df, ['total', 'cost', 'amount', 'value', 'sum'])
-                
-                # Need at least item column
-                if not item_col:
-                    logger.debug(f"Table {table_idx + 1}: No item column found, skipping")
-                    continue
-                
-                logger.info(f"Table {table_idx + 1}: Found item column '{item_col}'")
-                
-                for row_idx, row in df.iterrows():
-                    try:
-                        item = self._parse_cost_row(
-                            row, item_col, qty_col, unit_col, 
-                            unit_price_col, total_col
-                        )
-                        if item:
-                            cost_items.append(item)
-                            logger.debug(f"  ✓ Extracted: {item['item_name'][:50]}")
-                    except Exception as e:
-                        logger.debug(f"  ✗ Skipped row {row_idx}: {e}")
-                        continue
-                        
-            except Exception as e:
-                logger.error(f"Error processing table {table_idx + 1}: {e}")
-                continue
+        # Strategy 1: Extract from summary tables (pages 18-20)
+        cost_items.extend(self._extract_from_summary_tables())
         
-        logger.info(f"Total items extracted from tables: {len(cost_items)}")
+        # Strategy 2: Extract from unit price table (page 25)
+        cost_items.extend(self._extract_from_unit_price_table())
+        
+        # Strategy 3: LLM extraction if insufficient data
+        if len(cost_items) < 5:
+            logger.warning("Insufficient cost items extracted, trying LLM extraction")
+            llm_items = self._extract_with_llm()
+            cost_items.extend(llm_items)
+        
+        # Remove duplicates
+        cost_items = self._deduplicate_items(cost_items)
+        
+        logger.info(f"Extracted {len(cost_items)} cost items")
         return cost_items
     
-    def _find_column(self, df: pd.DataFrame, possible_names: List[str]) -> Optional[str]:
-        """Find column name from list of possibilities."""
-        for col in df.columns:
-            col_lower = str(col).lower()
-            for name in possible_names:
-                if name in col_lower:
-                    return col
-        return None
-    
-    def _parse_cost_row(
-        self,
-        row: pd.Series,
-        item_col: str,
-        qty_col: Optional[str],
-        unit_col: Optional[str],
-        unit_price_col: Optional[str],
-        total_col: Optional[str]
-    ) -> Optional[Dict[str, Any]]:
-        """Parse a single cost row."""
+    def _extract_from_summary_tables(self) -> List[Dict[str, Any]]:
+        """
+        Extract from Civil Works Cost Summary Tables.
+        Targets pages 18-20 which contain detailed cost breakdowns.
+        """
+        cost_items = []
         
-        # Extract item name
-        item_name = str(row[item_col]).strip()
-        if not item_name or item_name.lower() in ['nan', 'none', '', 'total', 'subtotal', 'sum']:
-            return None
+        # Pages with cost summary data (18-20 = indices 17-19)
+        target_pages = [17, 18, 19, 20, 21, 22, 23]
         
-        # Skip header-like rows
-        if any(word in item_name.lower() for word in ['item', 'description', 'particulars']):
-            return None
-        
-        # Extract quantity
-        quantity = 0.0
-        unit = "unit"
-        if qty_col and pd.notna(row.get(qty_col)):
-            parsed_qty, parsed_unit = self._parse_quantity(row[qty_col])
-            if parsed_qty:
-                quantity = float(parsed_qty)
-            if parsed_unit:
-                unit = parsed_unit
-        
-        # Override unit if there's a separate unit column
-        if unit_col and pd.notna(row.get(unit_col)):
-            extracted_unit = str(row[unit_col]).strip()
-            if extracted_unit and extracted_unit.lower() != 'nan':
-                unit = extracted_unit
-        
-        # Extract unit price
-        unit_price = 0.0
-        if unit_price_col and pd.notna(row.get(unit_price_col)):
-            parsed_price = self._parse_currency(row[unit_price_col])
-            if parsed_price:
-                unit_price = float(parsed_price)
-        
-        # Extract total cost
-        total_cost = 0.0
-        if total_col and pd.notna(row.get(total_col)):
-            parsed_total = self._parse_currency(row[total_col])
-            if parsed_total:
-                total_cost = float(parsed_total)
-        
-        # Calculate missing values
-        if quantity > 0 and unit_price > 0 and total_cost == 0:
-            total_cost = quantity * unit_price
-        elif total_cost > 0 and quantity > 0 and unit_price == 0:
-            unit_price = total_cost / quantity
-        elif total_cost > 0 and unit_price > 0 and quantity == 0:
-            quantity = total_cost / unit_price
-        
-        # Determine cost type (heuristic)
-        cost_type = self._determine_cost_type(item_name)
-        
-        return {
-            "item_name": item_name,
-            "quantity": quantity,
-            "unit": unit,
-            "unit_price_yen": unit_price,
-            "total_cost_yen": total_cost,
-            "cost_type": cost_type,
-        }
-    
-    def _parse_quantity(self, value: Any) -> tuple[Optional[Decimal], Optional[str]]:
-        """Parse quantity and extract unit if present."""
-        if pd.isna(value):
-            return None, None
-        
-        value_str = str(value).strip()
-        
-        # Try to extract number and unit (e.g., "736.2t", "120,000.0m3")
-        match = re.match(r'([0-9,\.]+)\s*([a-zA-Z0-9³²]+)?', value_str)
-        if match:
-            num_str = match.group(1).replace(',', '')
-            unit = match.group(2) if match.group(2) else None
+        for page_num in target_pages:
             try:
-                return Decimal(num_str), unit
-            except:
-                return None, unit
+                tables = self._extract_tables_from_page(page_num)
+                
+                for table in tables:
+                    if len(table) < 2:
+                        continue
+                    
+                    # Check if this is a cost table
+                    header_row = ' '.join(table[0]).lower()
+                    
+                    if 'unit price' not in header_row and 'construction expense' not in header_row:
+                        continue
+                    
+                    logger.info(f"Processing cost table on page {page_num + 1}")
+                    
+                    # Find column indices
+                    col_indices = self._identify_columns(table[0])
+                    
+                    # Process data rows
+                    for row in table[1:]:
+                        item = self._parse_cost_row(row, col_indices)
+                        if item:
+                            cost_items.append(item)
+                
+            except Exception as e:
+                logger.debug(f"Error on page {page_num + 1}: {e}")
+                continue
         
-        return None, None
+        return cost_items
     
-    def _parse_currency(self, value: Any) -> Optional[Decimal]:
-        """Parse currency value (handles yen symbols, commas, etc.)."""
-        if pd.isna(value):
+    def _identify_columns(self, header_row: List[str]) -> Dict[str, int]:
+        """Identify which columns contain which data."""
+        columns = {
+            'item': -1,
+            'unit': -1,
+            'unit_price': -1,
+            'quantity': -1
+        }
+        
+        for idx, cell in enumerate(header_row):
+            cell_lower = str(cell).lower()
+            
+            if 'work item' in cell_lower or 'item' in cell_lower:
+                columns['item'] = idx
+            elif 'unit price' in cell_lower or 'rp' in cell_lower:
+                columns['unit_price'] = idx
+            elif cell_lower in ['unit', 'm', 'm2', 'm3', 't', 'ton', 'km', 'no']:
+                columns['unit'] = idx
+            elif 'quantity' in cell_lower:
+                columns['quantity'] = idx
+        
+        return columns
+    
+    def _parse_cost_row(self, row: List[str], col_indices: Dict[str, int]) -> Optional[Dict[str, Any]]:
+        """Parse a single cost table row."""
+        try:
+            # Get item name
+            item_name = None
+            if col_indices['item'] >= 0 and col_indices['item'] < len(row):
+                item_name = row[col_indices['item']].strip()
+            else:
+                # Fallback: find first non-numeric column
+                for cell in row:
+                    if cell and not self._is_numeric(cell):
+                        item_name = cell.strip()
+                        break
+            
+            if not item_name or len(item_name) < 2:
+                return None
+            
+            # Skip header-like rows
+            skip_keywords = ['work item', 'unit price', 'no', 'recapitulation', 'stage', 'total']
+            if any(kw in item_name.lower() for kw in skip_keywords):
+                return None
+            
+            # Get unit
+            unit = 'unit'
+            if col_indices['unit'] >= 0 and col_indices['unit'] < len(row):
+                unit = row[col_indices['unit']].strip() or 'unit'
+            
+            # Get unit price and costs
+            unit_price = Decimal('0')
+            total_cost = Decimal('0')
+            
+            for cell in row:
+                if not cell:
+                    continue
+                
+                value = self._parse_currency(cell)
+                if value > 0:
+                    # Unit prices typically < 100M, total costs can be larger
+                    if value < 100_000_000:
+                        unit_price = max(unit_price, value)
+                    total_cost = max(total_cost, value)
+            
+            # Must have at least some cost data
+            if unit_price == 0 and total_cost == 0:
+                return None
+            
+            # If only total cost, derive unit price
+            if unit_price == 0:
+                unit_price = total_cost
+            
+            # Determine cost type
+            cost_type = 'other'
+            item_lower = item_name.lower()
+            if 'foreign' in item_lower or 'currency' in item_lower:
+                cost_type = 'foreign'
+            elif 'local' in item_lower:
+                cost_type = 'local'
+            
+            return {
+                'item_name': item_name,
+                'quantity': 1.0,
+                'unit': unit if unit else 'unit',
+                'unit_price_yen': float(unit_price),
+                'total_cost_yen': float(total_cost if total_cost > 0 else unit_price),
+                'cost_type': cost_type
+            }
+            
+        except Exception as e:
+            logger.debug(f"Error parsing row: {e}")
             return None
-        
-        value_str = str(value).strip()
-        
-        # Remove currency symbols and commas
-        cleaned = re.sub(r'[¥$,\s]', '', value_str)
+    
+    def _extract_from_unit_price_table(self) -> List[Dict[str, Any]]:
+        """Extract from Unit Price Table (page 25)."""
+        cost_items = []
         
         try:
-            return Decimal(cleaned)
-        except:
-            return None
-    
-    def _determine_cost_type(self, item_name: str) -> str:
-        """Heuristic to determine if cost is foreign or local."""
-        item_lower = item_name.lower()
+            # Page 25 is index 24
+            tables = self._extract_tables_from_page(24)
+            
+            for table in tables:
+                if len(table) < 2:
+                    continue
+                
+                header = ' '.join(table[0]).lower()
+                if 'unit price' not in header:
+                    continue
+                
+                logger.info("Processing unit price table")
+                
+                for row in table[1:]:
+                    if len(row) < 3:
+                        continue
+                    
+                    try:
+                        # Format: [No, Work item, Unit, Unit price (Rp)]
+                        item_name = row[1].strip() if len(row) > 1 else ""
+                        unit = row[2].strip() if len(row) > 2 else "unit"
+                        unit_price_str = row[3].strip() if len(row) > 3 else "0"
+                        
+                        if not item_name or item_name.lower() in ['work item', 'no']:
+                            continue
+                        
+                        unit_price = self._parse_currency(unit_price_str)
+                        
+                        if unit_price > 0:
+                            cost_items.append({
+                                'item_name': item_name,
+                                'quantity': 1.0,
+                                'unit': unit,
+                                'unit_price_yen': float(unit_price),
+                                'total_cost_yen': float(unit_price),
+                                'cost_type': 'unit_price'
+                            })
+                    
+                    except Exception as e:
+                        logger.debug(f"Error parsing unit price row: {e}")
+                        continue
         
-        if any(word in item_lower for word in ['import', 'foreign', 'overseas', 'international']):
-            return 'foreign'
-        elif any(word in item_lower for word in ['local', 'domestic', 'onsite']):
-            return 'local'
-        else:
-            return 'other'
+        except Exception as e:
+            logger.error(f"Error extracting unit price table: {e}")
+        
+        return cost_items
     
     def _extract_with_llm(self) -> List[Dict[str, Any]]:
-        """Use LLM to extract costs from narrative sections."""
-        text = self.extract_text_pdfplumber()
-        
-        system_prompt = """You are a construction cost estimation expert. Extract cost items from construction planning documents.
-Return a JSON array with this structure:
-{
-  "cost_items": [
-    {
-      "item_name": "string",
-      "quantity": number,
-      "unit": "string",
-      "unit_price_yen": number,
-      "total_cost_yen": number,
-      "cost_type": "foreign|local|other"
-    }
-  ]
-}
-
-Extract all cost items with their quantities, prices, and totals. If values are missing, use 0."""
-
-        user_prompt = f"""Extract all cost items from this construction planning document:
-
-{text[:10000]}
-
-Return valid JSON only. Include any cost information you find."""
-
+        """Use LLM to extract cost data from text."""
         try:
-            response = self.call_llm(
-                prompt=user_prompt,
-                system_prompt=system_prompt,
-                temperature=0.1,
-                max_tokens=4000
-            )
+            # Extract text from cost pages (18-25)
+            cost_text = ""
+            for page_num in range(17, 25):
+                try:
+                    page_text = self._extract_text_from_page(page_num)
+                    if page_text:
+                        cost_text += page_text + "\n\n"
+                except:
+                    continue
             
-            # Parse JSON
-            json_str = response.strip()
-            if json_str.startswith('```'):
-                json_str = re.sub(r'```json\s*', '', json_str)
-                json_str = re.sub(r'```\s*$', '', json_str)
+            if not cost_text or len(cost_text) < 100:
+                logger.error("Insufficient text for LLM extraction")
+                return []
             
-            data = json.loads(json_str)
-            return data.get('cost_items', [])
+            # Limit context size
+            cost_text = cost_text[:20000]
+            
+            prompt = f"""Extract construction cost items from this document.
+
+Document text:
+{cost_text}
+
+Extract items with:
+- item_name: work item description
+- quantity: number (default 1)
+- unit: m, m2, m3, t, ton, km, no, set
+- unit_price_yen: unit price in Rupiah
+- total_cost_yen: total cost in Rupiah
+- cost_type: "foreign", "local", or "other"
+
+Focus on items from EARTH WORKS, BRIDGE WORKS, and DRAIN WORKER sections.
+
+Return a JSON array with at least 20 items. Example:
+[
+  {{
+    "item_name": "Land preparation",
+    "quantity": 1.0,
+    "unit": "m2",
+    "unit_price_yen": 15362,
+    "total_cost_yen": 15362,
+    "cost_type": "other"
+  }}
+]
+
+Return ONLY the JSON array, no other text."""
+
+            response = self._call_llm(prompt, temperature=0.1, max_tokens=3000)
+            
+            # Extract JSON
+            json_match = re.search(r'\[.*\]', response, re.DOTALL)
+            if json_match:
+                import json
+                items = json.loads(json_match.group())
+                logger.info(f"LLM extracted {len(items)} items")
+                return items
             
         except Exception as e:
             logger.error(f"LLM extraction failed: {e}")
-            return []
+        
+        return []
+    
+    def _is_numeric(self, text: str) -> bool:
+        """Check if text is primarily numeric."""
+        if not text:
+            return False
+        cleaned = text.replace(',', '').replace('.', '').replace(' ', '').replace('-', '')
+        return len(cleaned) > 0 and sum(c.isdigit() for c in cleaned) / len(cleaned) > 0.5
+    
+    def _parse_currency(self, text: str) -> Decimal:
+        """Parse currency value from text."""
+        if not text:
+            return Decimal('0')
+        
+        try:
+            # Clean the text
+            cleaned = str(text).replace('Rp', '').replace('yen', '').replace(' ', '').strip()
+            cleaned = cleaned.replace(',', '')
+            
+            # Handle parentheses (negatives)
+            if '(' in cleaned:
+                cleaned = cleaned.replace('(', '-').replace(')', '')
+            
+            # Extract number
+            match = re.search(r'-?\d+\.?\d*', cleaned)
+            if match:
+                return Decimal(match.group())
+            
+        except Exception as e:
+            logger.debug(f"Currency parse error for '{text}': {e}")
+        
+        return Decimal('0')
     
     def _deduplicate_items(self, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Remove duplicate cost items."""
@@ -297,57 +338,45 @@ Return valid JSON only. Include any cost information you find."""
         unique_items = []
         
         for item in items:
+            # Create a key from item name
             key = item['item_name'].lower().strip()
-            if key not in seen and key not in ['no cost data extracted']:
+            
+            if key not in seen:
                 seen.add(key)
                 unique_items.append(item)
         
         return unique_items
     
     def extract_for_semantic_search(self) -> List[Dict[str, Any]]:
-        """
-        Extract and chunk content for semantic search.
-        """
-        text = self.extract_text_pdfplumber()
-        
+        """Create semantic search chunks."""
         chunks = []
         
-        # Chunk the full text
-        text_chunks = self._chunk_text(text, chunk_size=1000, overlap=200)
+        # Extract all text
+        full_text = self._extract_all_text()
         
-        for idx, chunk in enumerate(text_chunks):
+        if not full_text:
+            logger.warning("No text extracted for semantic search")
+            return chunks
+        
+        # Create overlapping chunks
+        chunk_size = 1000
+        overlap = 200
+        
+        for i in range(0, len(full_text), chunk_size - overlap):
+            chunk_text = full_text[i:i + chunk_size]
+            
+            if len(chunk_text) < 100:
+                continue
+            
             chunks.append({
-                "content": chunk,
-                "metadata": {
-                    "document_type": "costing",
-                    "file_name": self.file_name,
-                    "chunk_index": idx,
-                    "content_type": "text"
+                'text': chunk_text,
+                'metadata': {
+                    'document_type': 'costing',
+                    'chunk_index': len(chunks),
+                    'file_name': self.file_name
                 }
             })
         
+        logger.info(f"Created {len(chunks)} semantic chunks")
         return chunks
     
-    def _chunk_text(self, text: str, chunk_size: int, overlap: int) -> List[str]:
-        """Split text into overlapping chunks."""
-        chunks = []
-        start = 0
-        text_length = len(text)
-        
-        while start < text_length:
-            end = start + chunk_size
-            chunk = text[start:end]
-            
-            if end < text_length:
-                last_period = chunk.rfind('.')
-                last_newline = chunk.rfind('\n')
-                break_point = max(last_period, last_newline)
-                
-                if break_point > chunk_size // 2:
-                    chunk = chunk[:break_point + 1]
-                    end = start + len(chunk)
-            
-            chunks.append(chunk.strip())
-            start = end - overlap
-        
-        return chunks

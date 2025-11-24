@@ -72,44 +72,51 @@ def process_single_document(
         run_logger.info(f"✓ Created document record (ID: {document_id})")
         
         # Step 3: Extract structured data based on document type
+        # Step 3: Extract structured data based on document type
         if document_type == 'schedule':
-            extraction_result = extract_schedule_data(file_path)
+            extraction_result = extract_schedule_data(document_id, file_path)  # ✅ Pass document_id
             
             if extraction_result['success']:
-                tasks = extraction_result['data']['tasks']
+                tasks = extraction_result['tasks']  # ✅ Changed from ['data']['tasks']
                 stats['tasks'] = len(tasks)
                 run_logger.info(f"✓ Extracted {len(tasks)} tasks")
                 
                 # Load to PostgreSQL
-                load_result = load_tasks_to_postgres(tasks, document_id)
+                # For schedule:
+            if extraction_result['success']:
+                tasks = extraction_result['tasks']
+                stats['tasks'] = len(tasks)
+                run_logger.info(f"✓ Extracted {len(tasks)} tasks")
+                
+                # Load to PostgreSQL - pass the whole extraction_result
+                load_result = load_tasks_to_postgres(extraction_result)  # ✅ Pass entire dict
                 if load_result['success']:
                     run_logger.info(f"✓ Loaded {load_result['records_loaded']} tasks to PostgreSQL")
-                else:
-                    raise Exception(f"Failed to load tasks: {load_result.get('error')}")
-            else:
-                raise Exception(f"Extraction failed: {extraction_result.get('error')}")
-                
+
         elif document_type == 'costing':
-            extraction_result = extract_costing_data(file_path)
+            extraction_result = extract_costing_data(document_id, file_path)  # ✅ Pass document_id
             
             if extraction_result['success']:
-                cost_items = extraction_result['data']['cost_items']
+                cost_items = extraction_result['cost_items']  # ✅ Changed from ['data']['cost_items']
                 stats['cost_items'] = len(cost_items)
                 run_logger.info(f"✓ Extracted {len(cost_items)} cost items")
                 
                 # Load to PostgreSQL
-                load_result = load_costs_to_postgres(cost_items, document_id)
-                if load_result['success']:
-                    run_logger.info(f"✓ Loaded {load_result['records_loaded']} cost items to PostgreSQL")
-                else:
-                    raise Exception(f"Failed to load cost items: {load_result.get('error')}")
-            else:
-                raise Exception(f"Extraction failed: {extraction_result.get('error')}")
-        else:
-            raise ValueError(f"Unknown document type: {document_type}")
-        
+                # For costing:
+            elif document_type == 'costing':
+                extraction_result = extract_costing_data(document_id, file_path)
+                
+                if extraction_result['success']:
+                    cost_items = extraction_result['cost_items']
+                    stats['cost_items'] = len(cost_items)
+                    run_logger.info(f"✓ Extracted {len(cost_items)} cost items")
+                    
+                    # Load to PostgreSQL - pass the whole extraction_result
+            load_result = load_costs_to_postgres(extraction_result)  # ✅ Pass entire dict
+            if load_result['success']:
+                run_logger.info(f"✓ Loaded {load_result['records_loaded']} cost items to PostgreSQL")
         # Step 4: Extract semantic chunks
-        chunks_result = extract_semantic_chunks(file_path, document_type)
+        chunks_result = extract_semantic_chunks(document_id, file_path, document_type)
         
         if chunks_result['success']:
             chunks = chunks_result['chunks']
@@ -117,7 +124,7 @@ def process_single_document(
             run_logger.info(f"✓ Extracted {len(chunks)} semantic chunks")
             
             # Load to ChromaDB
-            vector_result = load_chunks_to_chromadb(chunks, document_id)
+            vector_result = load_chunks_to_chromadb(chunks_result)  # Pass the whole result
             if vector_result['success']:
                 run_logger.info(f"✓ Loaded {vector_result['records_loaded']} chunks to ChromaDB")
             else:
