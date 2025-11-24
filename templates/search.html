@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Document Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin: 30px 0;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .mode-toggle {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .mode-toggle button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+        .mode-toggle button.active {
+            background: #764ba2;
+        }
+        .answer-box {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            display: none;
+        }
+        .answer-box.show {
+            display: block;
+        }
+        .answer-header {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .answer-content {
+            line-height: 1.8;
+            color: #333;
+        }
+        .sources {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+        .sources-label {
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .source-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin: 3px;
+            font-size: 12px;
+        }
+        .confidence {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .confidence.high {
+            background: #10b981;
+            color: white;
+        }
+        .confidence.medium {
+            background: #f59e0b;
+            color: white;
+        }
+        .confidence.low {
+            background: #ef4444;
+            color: white;
+        }
+        .results {
+            margin-top: 30px;
+        }
+        .results-header {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .result-item {
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+        }
+        .score {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        .content {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .metadata {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .loading {
+            text-align: center;
+            color: #667eea;
+            display: none;
+            padding: 20px;
+            font-size: 16px;
+        }
+        .loading.show {
+            display: block;
+        }
+        .error {
+            background: #fee;
+            border-left-color: #f00;
+            color: #c00;
+        }
+        .examples {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .examples h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .example-query {
+            display: inline-block;
+            background: white;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+        .example-query:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Document Search & Q&A</h1>
+        <p class="subtitle">Ask questions and get AI-powered answers from construction documents</p>
+        
+        <div class="mode-toggle">
+            <button id="ragMode" class="active" onclick="setMode('rag')">🤖 AI Answer</button>
+            <button id="searchMode" onclick="setMode('search')">🔍 Raw Search</button>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" id="searchQuery" placeholder="Ask a question (e.g., 'When does the new GFA definition take effect?')" />
+            <button id="searchBtn" onclick="performSearch()">Ask</button>
+        </div>
+        
+        <div class="examples">
+            <h3>💡 Example Questions:</h3>
+            <span class="example-query" onclick="setQuery('When does the new GFA definition take effect?')">When does the new GFA definition take effect?</span>
+            <span class="example-query" onclick="setQuery('What is the Urban Redevelopment Authority?')">What is the Urban Redevelopment Authority?</span>
+            <span class="example-query" onclick="setQuery('What are the project tasks?')">What are the project tasks?</span>
+            <span class="example-query" onclick="setQuery('What are the construction costs?')">What are the construction costs?</span>
+        </div>
+        
+        <div class="loading" id="loading">🔄 Processing your question...</div>
+        
+        <div class="answer-box" id="answerBox">
+            <div class="answer-header">
+                🤖 AI Answer
+                <span class="confidence" id="confidence"></span>
+            </div>
+            <div class="answer-content" id="answerContent"></div>
+            <div class="sources">
+                <div class="sources-label">📚 Sources:</div>
+                <div id="sourcesContainer"></div>
+            </div>
+        </div>
+        
+        <div class="results" id="results"></div>
+    </div>
+
+    <script>
+        let currentMode = 'rag';
+        const searchInput = document.getElementById('searchQuery');
+        
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('ragMode').classList.toggle('active', mode === 'rag');
+            document.getElementById('searchMode').classList.toggle('active', mode === 'search');
+            
+            // Update placeholder
+            if (mode === 'rag') {
+                searchInput.placeholder = "Ask a question (e.g., 'When does the new GFA definition take effect?')";
+            } else {
+                searchInput.placeholder = "Enter search keywords (e.g., 'construction schedule')";
+            }
+        }
+
+        function setQuery(query) {
+            document.getElementById('searchQuery').value = query;
+            performSearch();
+        }
+
+        async function performSearch() {
+            const query = document.getElementById('searchQuery').value.trim();
+            const resultsDiv = document.getElementById('results');
+            const loadingDiv = document.getElementById('loading');
+            const answerBox = document.getElementById('answerBox');
+            const searchBtn = document.getElementById('searchBtn');
+            
+            if (!query) {
+                alert('Please enter a question or search query');
+                return;
+            }
+            
+            resultsDiv.innerHTML = '';
+            answerBox.classList.remove('show');
+            loadingDiv.classList.add('show');
+            searchBtn.disabled = true;
+            
+            try {
+                if (currentMode === 'rag') {
+                    await performRAGQuery(query);
+                } else {
+                    await performSemanticSearch(query);
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="result-item error">Error: ${error.message}</div>`;
+                console.error('Search error:', error);
+            } finally {
+                loadingDiv.classList.remove('show');
+                searchBtn.disabled = false;
+            }
+        }
+
+        async function performRAGQuery(query) {
+            const response = await fetch('/api/query/rag-query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query, n_results: 5 })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Show AI answer
+            const answerBox = document.getElementById('answerBox');
+            const answerContent = document.getElementById('answerContent');
+            const sourcesContainer = document.getElementById('sourcesContainer');
+            const confidenceSpan = document.getElementById('confidence');
+            
+            answerContent.textContent = data.answer;
+            answerBox.classList.add('show');
+            
+            // Show confidence
+            confidenceSpan.textContent = data.confidence.toUpperCase();
+            confidenceSpan.className = 'confidence ' + data.confidence;
+            
+            // Show sources
+            sourcesContainer.innerHTML = data.sources_used
+                .map(source => `<span class="source-tag">📄 ${source}</span>`)
+                .join('');
+            
+            // Show search results
+            displaySearchResults(data.search_results, 'Supporting Context:');
+        }
+
+        async function performSemanticSearch(query) {
+            const response = await fetch('/api/query/semantic-search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query, n_results: 5 })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const results = await response.json();
+            displaySearchResults(results, 'Search Results:');
+        }
+
+        function displaySearchResults(results, headerText) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<div class="result-item error">No results found. Try a different query.</div>';
+                return;
+            }
+            
+            resultsDiv.innerHTML = `<div class="results-header">${headerText} (${results.length})</div>`;
+            
+            results.forEach((result, index) => {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result-item';
+                resultDiv.innerHTML = `
+                    <div>
+                        <span class="score">Score: ${result.relevance_score.toFixed(4)}</span>
+                        <strong>Source ${index + 1}</strong>
+                    </div>
+                    <div class="content">${result.content}</div>
+                    <div class="metadata">
+                        📄 ${result.metadata.file_name || 'Unknown'} | 
+                        Type: ${result.metadata.document_type || 'Unknown'}
+                    </div>
+                `;
+                resultsDiv.appendChild(resultDiv);
+            });
+        }
+    </script>
+</body>
+</html>

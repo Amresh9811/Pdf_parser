@@ -1,0 +1,435 @@
+2025-11-24 14:01:33.262 | ERROR    | __main__:main:66 - Pipeline failed for costing.pdf: Failed to reach API at http://localhost:4200/api/
+2025-11-24 14:01:51.290 | ERROR    | __main__:main:66 - Pipeline failed for schedule.pdf: Failed to reach API at http://localhost:4200/api/
+2025-11-24 14:06:29.191 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 14:06:29.191 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: costing.pdf (1266970 bytes)
+2025-11-24 14:06:30.486 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for costing.pdf
+2025-11-24 14:06:30.728 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 1
+2025-11-24 14:06:31.912 | INFO     | pipeline.tasks.extraction_tasks:extract_costing_data:149 - Extracting costing data from: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 14:06:32.402 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized CostingExtractor for costing.pdf
+2025-11-24 14:06:32.402 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:26 - Starting cost extraction for costing.pdf
+2025-11-24 14:06:32.529 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 1
+2025-11-24 14:06:33.262 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 12
+2025-11-24 14:06:33.291 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 13
+2025-11-24 14:06:33.407 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 5 tables on page 14
+2025-11-24 14:06:33.457 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 15
+2025-11-24 14:06:33.485 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 16
+2025-11-24 14:06:33.496 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 17
+2025-11-24 14:06:33.496 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 18
+2025-11-24 14:06:33.578 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 3 tables on page 19
+2025-11-24 14:06:33.641 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 20
+2025-11-24 14:06:33.715 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 21
+2025-11-24 14:06:33.762 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 22
+2025-11-24 14:06:33.785 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 23
+2025-11-24 14:06:33.786 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:33 - Supplementing table extraction with LLM
+2025-11-24 14:06:35.092 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 25342 characters using pdfplumber
+2025-11-24 14:06:38.297 | ERROR    | pipeline.tasks.extraction_tasks:extract_costing_data:164 - Costing extraction failed: Failed to extract any cost items
+2025-11-24 14:06:39.308 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:418 - Updated document 1 status to failed
+2025-11-24 14:06:40.568 | ERROR    | pipeline.tasks.extraction_tasks:notify_failure:457 - 
+    ╔═══════════════════════════════════════╗
+    ║     Pipeline Failed!                  ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: D:\Pdf_parser\data\documents\costing.pdf
+    Error: Extraction failed: Failed to extract any cost items
+    
+2025-11-24 14:06:43.252 | ERROR    | __main__:main:66 - Pipeline failed for costing.pdf: Extraction failed: Failed to extract any cost items
+2025-11-24 14:06:46.073 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 14:06:46.073 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: schedule.pdf (232295 bytes)
+2025-11-24 14:06:47.116 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for schedule.pdf
+2025-11-24 14:06:47.120 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 2
+2025-11-24 14:06:48.398 | INFO     | pipeline.tasks.extraction_tasks:extract_schedule_data:110 - Extracting schedule data from: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 14:06:48.951 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized ProjectScheduleExtractor for schedule.pdf
+2025-11-24 14:06:48.951 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:25 - Starting schedule extraction for schedule.pdf
+2025-11-24 14:06:49.533 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 11
+2025-11-24 14:06:49.616 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 12
+2025-11-24 14:06:49.642 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 13
+2025-11-24 14:06:50.079 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 18
+2025-11-24 14:06:50.254 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 19
+2025-11-24 14:06:50.532 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 20
+2025-11-24 14:06:50.922 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 21
+2025-11-24 14:06:51.248 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 22
+2025-11-24 14:06:51.496 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 23
+2025-11-24 14:06:51.887 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 24
+2025-11-24 14:06:52.126 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 25
+2025-11-24 14:06:52.638 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 26
+2025-11-24 14:06:53.100 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 27
+2025-11-24 14:06:53.550 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 28
+2025-11-24 14:06:54.266 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 29
+2025-11-24 14:06:54.503 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 30
+2025-11-24 14:06:54.544 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:32 - Supplementing table extraction with LLM
+2025-11-24 14:07:00.532 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 52974 characters using pdfplumber
+2025-11-24 14:07:13.954 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:42 - Successfully extracted 16 tasks
+2025-11-24 14:07:13.954 | INFO     | pipeline.tasks.extraction_tasks:extract_schedule_data:116 - Extracted 16 tasks
+2025-11-24 14:07:15.206 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:236 - Loading 16 tasks to PostgreSQL for document 2
+2025-11-24 14:07:15.252 | ERROR    | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:263 - Failed to load tasks: null value in column "start_date" of relation "project_tasks" violates not-null constraint
+DETAIL:  Failing row contains (1, 2025-11-24 08:37:15.20877+00, 2025-11-24 08:37:15.20877+00, 1, Preparation Construction, 90, null, null, null, null, 2).
+
+2025-11-24 14:07:16.325 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:418 - Updated document 2 status to failed
+2025-11-24 14:07:17.506 | ERROR    | pipeline.tasks.extraction_tasks:notify_failure:457 - 
+    ╔═══════════════════════════════════════╗
+    ║     Pipeline Failed!                  ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: D:\Pdf_parser\data\documents\schedule.pdf
+    Error: Failed to load tasks: null value in column "start_date" of relation "project_tasks" violates not-null constraint
+DETAIL:  Failing row contains (1, 2025-11-24 08:37:15.20877+00, 2025-11-24 08:37:15.20877+00, 1, Preparation Construction, 90, null, null, null, null, 2).
+
+    
+2025-11-24 14:07:20.210 | ERROR    | __main__:main:66 - Pipeline failed for schedule.pdf: Failed to load tasks: null value in column "start_date" of relation "project_tasks" violates not-null constraint
+DETAIL:  Failing row contains (1, 2025-11-24 08:37:15.20877+00, 2025-11-24 08:37:15.20877+00, 1, Preparation Construction, 90, null, null, null, null, 2).
+
+2025-11-24 14:18:40.912 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 14:18:40.912 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: costing.pdf (1266970 bytes)
+2025-11-24 14:18:42.204 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for costing.pdf
+2025-11-24 14:18:42.291 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 3
+2025-11-24 14:18:46.772 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 3 status to failed
+2025-11-24 14:18:48.088 | ERROR    | pipeline.tasks.extraction_tasks:notify_failure:470 - 
+    ╔═══════════════════════════════════════╗
+    ║     Pipeline Failed!                  ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: D:\Pdf_parser\data\documents\costing.pdf
+    Error: Extraction failed: Failed to extract any cost items
+    
+2025-11-24 14:18:50.773 | ERROR    | __main__:main:66 - Pipeline failed for costing.pdf: Extraction failed: Failed to extract any cost items
+2025-11-24 14:18:53.563 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 14:18:53.563 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: schedule.pdf (232295 bytes)
+2025-11-24 14:18:54.637 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for schedule.pdf
+2025-11-24 14:18:54.637 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 4
+2025-11-24 14:18:57.251 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:236 - Loading 16 tasks to PostgreSQL for document 4
+2025-11-24 14:18:57.267 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:268 - Successfully loaded 16 tasks
+2025-11-24 14:18:58.557 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:192 - Extracting semantic chunks from: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 14:18:59.094 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized ProjectScheduleExtractor for schedule.pdf
+2025-11-24 14:19:01.214 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 52974 characters using pdfplumber
+2025-11-24 14:19:01.214 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:205 - Extracted 68 chunks
+2025-11-24 14:19:02.409 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:351 - Loading 68 chunks to ChromaDB for document 4
+2025-11-24 14:19:02.409 | INFO     | pipeline.services.vector_service:__init__:30 - Connecting to ChromaDB Cloud...
+2025-11-24 14:19:05.119 | INFO     | pipeline.services.vector_service:__init__:36 - Connected to ChromaDB Cloud - Tenant: f1d5b184-a5ad-40bc-ae05-639f8073e790, Database: Amresh
+2025-11-24 14:19:05.119 | INFO     | pipeline.services.vector_service:__init__:50 - Using OpenAI embeddings
+2025-11-24 14:19:05.598 | INFO     | pipeline.services.vector_service:__init__:65 - Loaded existing collection: construction_docs
+2025-11-24 14:19:12.934 | INFO     | pipeline.services.vector_service:add_documents:122 - Added 68 documents to ChromaDB
+2025-11-24 14:19:12.993 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:377 - Successfully loaded 68 chunks
+2025-11-24 14:19:13.938 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 4 status to completed
+2025-11-24 14:19:15.025 | SUCCESS  | pipeline.tasks.extraction_tasks:notify_completion:449 - 
+    ╔═══════════════════════════════════════╗
+    ║   Pipeline Completed Successfully!   ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: schedule.pdf
+    Tasks Extracted: 16
+    Cost Items Extracted: 0
+    Chunks Created: 68
+    
+2025-11-24 14:34:18.423 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 14:34:18.423 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: costing.pdf (1266970 bytes)
+2025-11-24 14:34:19.718 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for costing.pdf
+2025-11-24 14:34:19.841 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 5
+2025-11-24 14:34:21.910 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 5 status to failed
+2025-11-24 14:34:23.191 | ERROR    | pipeline.tasks.extraction_tasks:notify_failure:470 - 
+    ╔═══════════════════════════════════════╗
+    ║     Pipeline Failed!                  ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: D:\Pdf_parser\data\documents\costing.pdf
+    Error: Extraction failed: Failed to extract any cost items
+    
+2025-11-24 14:34:25.871 | ERROR    | __main__:main:66 - Pipeline failed for costing.pdf: Extraction failed: Failed to extract any cost items
+2025-11-24 14:34:28.722 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 14:34:28.722 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: schedule.pdf (232295 bytes)
+2025-11-24 14:34:29.778 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for schedule.pdf
+2025-11-24 14:34:29.783 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 6
+2025-11-24 14:34:32.397 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:236 - Loading 16 tasks to PostgreSQL for document 6
+2025-11-24 14:34:32.412 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:268 - Successfully loaded 16 tasks
+2025-11-24 14:34:35.027 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:351 - Loading 68 chunks to ChromaDB for document 6
+2025-11-24 14:34:35.027 | INFO     | pipeline.services.vector_service:__init__:30 - Connecting to ChromaDB Cloud...
+2025-11-24 14:34:37.336 | INFO     | pipeline.services.vector_service:__init__:36 - Connected to ChromaDB Cloud - Tenant: f1d5b184-a5ad-40bc-ae05-639f8073e790, Database: Amresh
+2025-11-24 14:34:37.336 | INFO     | pipeline.services.vector_service:__init__:50 - Using OpenAI embeddings
+2025-11-24 14:34:38.054 | ERROR    | pipeline.services.vector_service:__init__:69 - Error with collection: An embedding function already exists in the collection configuration, and a new one is provided. If this is intentional, please embed documents separately. Embedding function conflict: new: openai vs persisted: default
+2025-11-24 14:34:38.054 | ERROR    | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:386 - Failed to load chunks: An embedding function already exists in the collection configuration, and a new one is provided. If this is intentional, please embed documents separately. Embedding function conflict: new: openai vs persisted: default
+2025-11-24 14:34:39.204 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 6 status to failed
+2025-11-24 14:34:40.512 | ERROR    | pipeline.tasks.extraction_tasks:notify_failure:470 - 
+    ╔═══════════════════════════════════════╗
+    ║     Pipeline Failed!                  ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: D:\Pdf_parser\data\documents\schedule.pdf
+    Error: Failed to load chunks: An embedding function already exists in the collection configuration, and a new one is provided. If this is intentional, please embed documents separately. Embedding function conflict: new: openai vs persisted: default
+    
+2025-11-24 14:34:43.400 | ERROR    | __main__:main:66 - Pipeline failed for schedule.pdf: Failed to load chunks: An embedding function already exists in the collection configuration, and a new one is provided. If this is intentional, please embed documents separately. Embedding function conflict: new: openai vs persisted: default
+2025-11-24 15:35:13.436 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 15:35:13.436 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: costing.pdf (1266970 bytes)
+2025-11-24 15:35:14.721 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for costing.pdf
+2025-11-24 15:35:14.877 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 7
+2025-11-24 15:35:16.097 | INFO     | pipeline.tasks.extraction_tasks:extract_costing_data:149 - Extracting costing data from: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 15:35:16.608 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized CostingExtractor for costing.pdf
+2025-11-24 15:35:16.608 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:26 - Starting cost extraction for costing.pdf
+2025-11-24 15:35:16.718 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 1
+2025-11-24 15:35:17.451 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 12
+2025-11-24 15:35:17.478 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 13
+2025-11-24 15:35:17.604 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 5 tables on page 14
+2025-11-24 15:35:17.636 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 15
+2025-11-24 15:35:17.662 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 16
+2025-11-24 15:35:17.671 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 17
+2025-11-24 15:35:17.689 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 18
+2025-11-24 15:35:17.764 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 3 tables on page 19
+2025-11-24 15:35:17.825 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 20
+2025-11-24 15:35:17.897 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 21
+2025-11-24 15:35:17.936 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 22
+2025-11-24 15:35:17.952 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 23
+2025-11-24 15:35:17.972 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:30 - Extracted 0 items from tables
+2025-11-24 15:35:17.972 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:33 - Supplementing with LLM extraction
+2025-11-24 15:35:19.296 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 25342 characters using pdfplumber
+2025-11-24 15:35:22.518 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:35 - Extracted 0 items from LLM
+2025-11-24 15:35:22.518 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:42 - Successfully extracted 0 cost items after deduplication
+2025-11-24 15:35:22.518 | WARNING  | pipeline.extractors.costing_extractor:extract_structured_data:46 - No cost items extracted - returning empty list
+2025-11-24 15:35:22.518 | INFO     | pipeline.tasks.extraction_tasks:extract_costing_data:155 - Extracted 0 cost items
+2025-11-24 15:35:23.685 | INFO     | pipeline.tasks.extraction_tasks:load_costs_to_postgres:298 - Loading 0 cost items to PostgreSQL for document 7
+2025-11-24 15:35:23.686 | INFO     | pipeline.tasks.extraction_tasks:load_costs_to_postgres:318 - Successfully loaded 0 cost items
+2025-11-24 15:35:24.948 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:192 - Extracting semantic chunks from: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 15:35:25.485 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized CostingExtractor for costing.pdf
+2025-11-24 15:35:26.752 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 25342 characters using pdfplumber
+2025-11-24 15:35:26.752 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:26 - Starting cost extraction for costing.pdf
+2025-11-24 15:35:26.829 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 1
+2025-11-24 15:35:27.427 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 12
+2025-11-24 15:35:27.466 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 13
+2025-11-24 15:35:27.601 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 5 tables on page 14
+2025-11-24 15:35:27.648 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 15
+2025-11-24 15:35:27.665 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 16
+2025-11-24 15:35:27.683 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 17
+2025-11-24 15:35:27.698 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 18
+2025-11-24 15:35:27.949 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 3 tables on page 19
+2025-11-24 15:35:27.996 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 20
+2025-11-24 15:35:28.064 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 21
+2025-11-24 15:35:28.118 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 22
+2025-11-24 15:35:28.141 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 23
+2025-11-24 15:35:28.144 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:30 - Extracted 0 items from tables
+2025-11-24 15:35:28.144 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:33 - Supplementing with LLM extraction
+2025-11-24 15:35:29.565 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 25342 characters using pdfplumber
+2025-11-24 15:35:31.172 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:35 - Extracted 0 items from LLM
+2025-11-24 15:35:31.174 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:42 - Successfully extracted 0 cost items after deduplication
+2025-11-24 15:35:31.176 | WARNING  | pipeline.extractors.costing_extractor:extract_structured_data:46 - No cost items extracted - returning empty list
+2025-11-24 15:35:31.177 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:205 - Extracted 35 chunks
+2025-11-24 15:35:32.477 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:351 - Loading 35 chunks to ChromaDB for document 7
+2025-11-24 15:35:32.478 | INFO     | pipeline.services.vector_service:__init__:30 - Connecting to ChromaDB Cloud...
+2025-11-24 15:35:35.481 | INFO     | pipeline.services.vector_service:__init__:36 - Connected to ChromaDB Cloud - Tenant: f1d5b184-a5ad-40bc-ae05-639f8073e790, Database: Amresh
+2025-11-24 15:35:35.481 | INFO     | pipeline.services.vector_service:__init__:50 - Using OpenAI embeddings
+2025-11-24 15:35:36.003 | INFO     | pipeline.services.vector_service:__init__:63 - Found existing collection: construction_docs
+2025-11-24 15:35:36.283 | INFO     | pipeline.services.vector_service:__init__:70 - Successfully using existing collection with OpenAI embeddings
+2025-11-24 15:35:40.978 | INFO     | pipeline.services.vector_service:add_documents:118 - Added 35 documents to ChromaDB
+2025-11-24 15:35:41.042 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:377 - Successfully loaded 35 chunks
+2025-11-24 15:35:42.055 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 7 status to completed
+2025-11-24 15:35:43.337 | SUCCESS  | pipeline.tasks.extraction_tasks:notify_completion:449 - 
+    ╔═══════════════════════════════════════╗
+    ║   Pipeline Completed Successfully!   ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: costing.pdf
+    Tasks Extracted: 0
+    Cost Items Extracted: 0
+    Chunks Created: 35
+    
+2025-11-24 15:35:48.842 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 15:35:48.842 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: schedule.pdf (232295 bytes)
+2025-11-24 15:35:49.919 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for schedule.pdf
+2025-11-24 15:35:49.944 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 8
+2025-11-24 15:35:51.264 | INFO     | pipeline.tasks.extraction_tasks:extract_schedule_data:110 - Extracting schedule data from: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 15:35:51.764 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized ProjectScheduleExtractor for schedule.pdf
+2025-11-24 15:35:51.764 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:25 - Starting schedule extraction for schedule.pdf
+2025-11-24 15:35:52.278 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 11
+2025-11-24 15:35:52.351 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 12
+2025-11-24 15:35:52.373 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 13
+2025-11-24 15:35:52.820 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 18
+2025-11-24 15:35:52.981 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 19
+2025-11-24 15:35:53.124 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 20
+2025-11-24 15:35:53.238 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 21
+2025-11-24 15:35:53.325 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 22
+2025-11-24 15:35:53.419 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 23
+2025-11-24 15:35:53.532 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 24
+2025-11-24 15:35:53.613 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 25
+2025-11-24 15:35:53.753 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 26
+2025-11-24 15:35:53.895 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 27
+2025-11-24 15:35:54.214 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 28
+2025-11-24 15:35:54.429 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 29
+2025-11-24 15:35:54.544 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 30
+2025-11-24 15:35:54.574 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:32 - Supplementing table extraction with LLM
+2025-11-24 15:35:57.196 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 52974 characters using pdfplumber
+2025-11-24 15:36:06.453 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:42 - Successfully extracted 16 tasks
+2025-11-24 15:36:06.454 | INFO     | pipeline.tasks.extraction_tasks:extract_schedule_data:116 - Extracted 16 tasks
+2025-11-24 15:36:07.451 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:236 - Loading 16 tasks to PostgreSQL for document 8
+2025-11-24 15:36:07.464 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:268 - Successfully loaded 16 tasks
+2025-11-24 15:36:08.607 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:192 - Extracting semantic chunks from: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 15:36:09.153 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized ProjectScheduleExtractor for schedule.pdf
+2025-11-24 15:36:11.375 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 52974 characters using pdfplumber
+2025-11-24 15:36:11.375 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:205 - Extracted 68 chunks
+2025-11-24 15:36:12.363 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:351 - Loading 68 chunks to ChromaDB for document 8
+2025-11-24 15:36:17.965 | INFO     | pipeline.services.vector_service:add_documents:118 - Added 68 documents to ChromaDB
+2025-11-24 15:36:17.990 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:377 - Successfully loaded 68 chunks
+2025-11-24 15:36:18.954 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 8 status to completed
+2025-11-24 15:36:20.053 | SUCCESS  | pipeline.tasks.extraction_tasks:notify_completion:449 - 
+    ╔═══════════════════════════════════════╗
+    ║   Pipeline Completed Successfully!   ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: schedule.pdf
+    Tasks Extracted: 16
+    Cost Items Extracted: 0
+    Chunks Created: 68
+    
+2025-11-24 16:00:00.613 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 16:00:00.613 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: costing.pdf (1266970 bytes)
+2025-11-24 16:00:01.877 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for costing.pdf
+2025-11-24 16:00:01.987 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 9
+2025-11-24 16:00:03.201 | INFO     | pipeline.tasks.extraction_tasks:extract_costing_data:149 - Extracting costing data from: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 16:00:03.701 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized CostingExtractor for costing.pdf
+2025-11-24 16:00:03.701 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:26 - Starting cost extraction for costing.pdf
+2025-11-24 16:00:03.824 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 1
+2025-11-24 16:00:04.544 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 12
+2025-11-24 16:00:04.577 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 13
+2025-11-24 16:00:04.704 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 5 tables on page 14
+2025-11-24 16:00:04.751 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 15
+2025-11-24 16:00:04.773 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 16
+2025-11-24 16:00:04.790 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 17
+2025-11-24 16:00:04.798 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 18
+2025-11-24 16:00:04.877 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 3 tables on page 19
+2025-11-24 16:00:04.923 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 20
+2025-11-24 16:00:05.001 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 21
+2025-11-24 16:00:05.055 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 22
+2025-11-24 16:00:05.075 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 23
+2025-11-24 16:00:05.075 | INFO     | pipeline.extractors.costing_extractor:_extract_from_tables:69 - Found 21 tables to process
+2025-11-24 16:00:05.075 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 1
+2025-11-24 16:00:05.081 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['col_0', 'col_1', 'col_2', 'col_3']
+2025-11-24 16:00:05.081 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 1: No item column found, skipping
+2025-11-24 16:00:05.081 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 3
+2025-11-24 16:00:05.088 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['ura: https://www.ura.gov.sg/feedbackweb/contactus_feedback.jsp']
+2025-11-24 16:00:05.088 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 3: No item column found, skipping
+2025-11-24 16:00:05.089 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 4
+2025-11-24 16:00:05.089 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['floor area type', 'definition']
+2025-11-24 16:00:05.089 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 4: No item column found, skipping
+2025-11-24 16:00:05.089 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 5
+2025-11-24 16:00:05.090 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['all covered floor areas of a development and all uncovered areas used for commercial']
+2025-11-24 16:00:05.090 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 5: No item column found, skipping
+2025-11-24 16:00:05.090 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 6
+2025-11-24 16:00:05.090 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['gfa will now be measured up to the middle of external walls, party walls and']
+2025-11-24 16:00:05.091 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 6: No item column found, skipping
+2025-11-24 16:00:05.091 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 7
+2025-11-24 16:00:05.091 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['where there are connecting external walls with varying thickness, a 50mm offset']
+2025-11-24 16:00:05.091 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 7: No item column found, skipping
+2025-11-24 16:00:05.091 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 8
+2025-11-24 16:00:05.092 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['ac ledges that are proposed to be retained as common property are similar to']
+2025-11-24 16:00:05.092 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 8: No item column found, skipping
+2025-11-24 16:00:05.092 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 9
+2025-11-24 16:00:05.092 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['there will be no change in the basis for gfa exemption policies. covered communal']
+2025-11-24 16:00:05.093 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 9: No item column found, skipping
+2025-11-24 16:00:05.093 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 10
+2025-11-24 16:00:05.093 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['there are some areas that are subject to a minimum or maximum width criteria before']
+2025-11-24 16:00:05.094 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 10: No item column found, skipping
+2025-11-24 16:00:05.094 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 11
+2025-11-24 16:00:05.094 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['s/n', 'diagrams']
+2025-11-24 16:00:05.094 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 11: No item column found, skipping
+2025-11-24 16:00:05.095 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 12
+2025-11-24 16:00:05.095 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['diagram 4\nmeasure to\nmiddle of\nshared wall', 'col_1']
+2025-11-24 16:00:05.095 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 12: No item column found, skipping
+2025-11-24 16:00:05.096 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 13
+2025-11-24 16:00:05.096 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['diagram 6\ngfa and\nwidth\nmeasurement\nof roof eave\nexemption', 'col_1']
+2025-11-24 16:00:05.097 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 13: No item column found, skipping
+2025-11-24 16:00:05.097 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 14
+2025-11-24 16:00:05.097 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['principles', 'application']
+2025-11-24 16:00:05.097 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 14: No item column found, skipping
+2025-11-24 16:00:05.098 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 15
+2025-11-24 16:00:05.098 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['house no.', 'strata lot', 'storey', 'col_3', 'col_4', 'strata area\n(sq. m)', 'col_6', 'col_7', 'total strata area', 'col_9', 'void area (not', 'col_11']
+2025-11-24 16:00:05.098 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 15: No item column found, skipping
+2025-11-24 16:00:05.099 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 16
+2025-11-24 16:00:05.099 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['strata area']
+2025-11-24 16:00:05.100 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 16: No item column found, skipping
+2025-11-24 16:00:05.100 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 17
+2025-11-24 16:00:05.100 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['col_0', 'total strata area void area (not counted in\nstrata\ntotal strata area. for\nhouse area\nstrata lot storey (sq. m) reference only)\nno\n(sq. m)\n(excludes void area) (sq. m)\n1st 520 0\n28c u49286n 2nd 420 1035 100\nroof 95 425']
+2025-11-24 16:00:05.100 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 17: No item column found, skipping
+2025-11-24 16:00:05.100 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 18
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['house\nno', 'strata lot', 'storey', 'strata\narea\n(sq. m)', 'total strata area\n(sq. m)\n(excludes void area)', 'void area (not counted in\ntotal strata area. for\nreference only)\n(sq. m)']
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 18: No item column found, skipping
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 19
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['floor area\ndefinition\n(agency)', 'changes', 'explanation']
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 19: No item column found, skipping
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:77 - Processing table 20
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:86 - Table columns: ['col_0', 'col_1', 'table 1b: minimum internal storey shelter (ss) floor area and volume']
+2025-11-24 16:00:05.101 | DEBUG    | pipeline.extractors.costing_extractor:_extract_from_tables:97 - Table 20: No item column found, skipping
+2025-11-24 16:00:05.101 | INFO     | pipeline.extractors.costing_extractor:_extract_from_tables:119 - Total items extracted from tables: 0
+2025-11-24 16:00:05.101 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:30 - Extracted 0 items from tables
+2025-11-24 16:00:05.101 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:34 - Supplementing with LLM extraction
+2025-11-24 16:00:06.620 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 25342 characters using pdfplumber
+2025-11-24 16:00:08.342 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:37 - Extracted 0 items from LLM
+2025-11-24 16:00:08.342 | INFO     | pipeline.extractors.costing_extractor:extract_structured_data:45 - Final extraction: 0 cost items
+2025-11-24 16:00:08.342 | WARNING  | pipeline.extractors.costing_extractor:extract_structured_data:49 - No cost items extracted - returning empty dataset
+2025-11-24 16:00:08.342 | INFO     | pipeline.tasks.extraction_tasks:extract_costing_data:155 - Extracted 1 cost items
+2025-11-24 16:00:09.503 | INFO     | pipeline.tasks.extraction_tasks:load_costs_to_postgres:298 - Loading 1 cost items to PostgreSQL for document 9
+2025-11-24 16:00:09.533 | INFO     | pipeline.tasks.extraction_tasks:load_costs_to_postgres:318 - Successfully loaded 1 cost items
+2025-11-24 16:00:10.754 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:192 - Extracting semantic chunks from: D:\Pdf_parser\data\documents\costing.pdf
+2025-11-24 16:00:11.274 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized CostingExtractor for costing.pdf
+2025-11-24 16:00:12.538 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 25342 characters using pdfplumber
+2025-11-24 16:00:12.538 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:205 - Extracted 34 chunks
+2025-11-24 16:00:13.757 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:351 - Loading 34 chunks to ChromaDB for document 9
+2025-11-24 16:00:13.757 | INFO     | pipeline.services.vector_service:__init__:30 - Connecting to ChromaDB Cloud...
+2025-11-24 16:00:16.414 | INFO     | pipeline.services.vector_service:__init__:36 - Connected to ChromaDB Cloud - Tenant: f1d5b184-a5ad-40bc-ae05-639f8073e790, Database: Amresh
+2025-11-24 16:00:16.417 | INFO     | pipeline.services.vector_service:__init__:50 - Using OpenAI embeddings
+2025-11-24 16:00:16.934 | INFO     | pipeline.services.vector_service:__init__:63 - Found existing collection: construction_docs
+2025-11-24 16:00:17.410 | INFO     | pipeline.services.vector_service:__init__:70 - Successfully using existing collection with OpenAI embeddings
+2025-11-24 16:00:21.427 | INFO     | pipeline.services.vector_service:add_documents:118 - Added 34 documents to ChromaDB
+2025-11-24 16:00:21.462 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:377 - Successfully loaded 34 chunks
+2025-11-24 16:00:22.452 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 9 status to completed
+2025-11-24 16:00:23.706 | SUCCESS  | pipeline.tasks.extraction_tasks:notify_completion:449 - 
+    ╔═══════════════════════════════════════╗
+    ║   Pipeline Completed Successfully!   ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: costing.pdf
+    Tasks Extracted: 0
+    Cost Items Extracted: 1
+    Chunks Created: 34
+    
+2025-11-24 16:00:29.215 | INFO     | pipeline.tasks.extraction_tasks:validate_document:41 - Validating document: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 16:00:29.215 | INFO     | pipeline.tasks.extraction_tasks:validate_document:53 - Document validated: schedule.pdf (232295 bytes)
+2025-11-24 16:00:30.421 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:81 - Creating document record for schedule.pdf
+2025-11-24 16:00:30.422 | INFO     | pipeline.tasks.extraction_tasks:create_document_record:90 - Created document record with ID: 10
+2025-11-24 16:00:31.796 | INFO     | pipeline.tasks.extraction_tasks:extract_schedule_data:110 - Extracting schedule data from: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 16:00:32.306 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized ProjectScheduleExtractor for schedule.pdf
+2025-11-24 16:00:32.306 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:25 - Starting schedule extraction for schedule.pdf
+2025-11-24 16:00:32.840 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 11
+2025-11-24 16:00:33.095 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 2 tables on page 12
+2025-11-24 16:00:33.118 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 13
+2025-11-24 16:00:33.378 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 18
+2025-11-24 16:00:33.537 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 19
+2025-11-24 16:00:33.680 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 20
+2025-11-24 16:00:33.806 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 21
+2025-11-24 16:00:33.902 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 22
+2025-11-24 16:00:33.988 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 23
+2025-11-24 16:00:34.097 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 24
+2025-11-24 16:00:34.172 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 25
+2025-11-24 16:00:34.317 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 26
+2025-11-24 16:00:34.456 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 27
+2025-11-24 16:00:34.756 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 28
+2025-11-24 16:00:34.869 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 29
+2025-11-24 16:00:34.948 | INFO     | pipeline.extractors.base_extractor:extract_tables_pdfplumber:84 - Found 1 tables on page 30
+2025-11-24 16:00:34.980 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:32 - Supplementing table extraction with LLM
+2025-11-24 16:00:37.327 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 52974 characters using pdfplumber
+2025-11-24 16:00:48.094 | INFO     | pipeline.extractors.schedule_extractor:extract_structured_data:42 - Successfully extracted 16 tasks
+2025-11-24 16:00:48.094 | INFO     | pipeline.tasks.extraction_tasks:extract_schedule_data:116 - Extracted 16 tasks
+2025-11-24 16:00:49.048 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:236 - Loading 16 tasks to PostgreSQL for document 10
+2025-11-24 16:00:49.078 | INFO     | pipeline.tasks.extraction_tasks:load_tasks_to_postgres:268 - Successfully loaded 16 tasks
+2025-11-24 16:00:50.139 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:192 - Extracting semantic chunks from: D:\Pdf_parser\data\documents\schedule.pdf
+2025-11-24 16:00:50.636 | INFO     | pipeline.extractors.base_extractor:__init__:39 - Initialized ProjectScheduleExtractor for schedule.pdf
+2025-11-24 16:00:52.713 | INFO     | pipeline.extractors.base_extractor:extract_text_pdfplumber:52 - Extracted 52974 characters using pdfplumber
+2025-11-24 16:00:52.713 | INFO     | pipeline.tasks.extraction_tasks:extract_semantic_chunks:205 - Extracted 68 chunks
+2025-11-24 16:00:53.689 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:351 - Loading 68 chunks to ChromaDB for document 10
+2025-11-24 16:00:58.690 | INFO     | pipeline.services.vector_service:add_documents:118 - Added 68 documents to ChromaDB
+2025-11-24 16:00:58.739 | INFO     | pipeline.tasks.extraction_tasks:load_chunks_to_chromadb:377 - Successfully loaded 68 chunks
+2025-11-24 16:00:59.730 | INFO     | pipeline.tasks.extraction_tasks:update_document_status:431 - Updated document 10 status to completed
+2025-11-24 16:01:00.786 | SUCCESS  | pipeline.tasks.extraction_tasks:notify_completion:449 - 
+    ╔═══════════════════════════════════════╗
+    ║   Pipeline Completed Successfully!   ║
+    ╚═══════════════════════════════════════╝
+    
+    Document: schedule.pdf
+    Tasks Extracted: 16
+    Cost Items Extracted: 0
+    Chunks Created: 68
+    
