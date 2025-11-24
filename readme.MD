@@ -873,9 +873,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For issues, questions, or contributions:
 
-- **Issues**: https://github.com/yourusername/project-contextualizer/issues
-- **Email**: your.email@example.com
-- **Documentation**: Full docs at [link]
+- **Issues**: Your Issues you can mail me.
+- **Email**: amresh.kumar90150@gmail.com
 
 ---
 
